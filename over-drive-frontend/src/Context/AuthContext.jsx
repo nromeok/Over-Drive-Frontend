@@ -82,6 +82,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Used by OAuthCallback — stores token + user coming back from Google/Facebook
+  const loginWithToken = useCallback((token, user) => {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    dispatch(loginSuccess(user));
+  }, []);
+
   const logoutUser = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
@@ -109,6 +116,7 @@ export const AuthProvider = ({ children }) => {
         error: state.error,
         login,
         register,
+        loginWithToken,
         logout: logoutUser,
         clearAuthError,
         updateUserProfile,

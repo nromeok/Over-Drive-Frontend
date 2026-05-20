@@ -1,49 +1,66 @@
 import { apiClient } from "./client";
+import { delay, MOCK_HISTORY } from "./mockData";
 
-/**
- * Vehicle API service
- * Adjust endpoint paths here if your backend uses different routes.
- */
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
+
+// In-memory store so deletes + new valuations persist during the session
+let mockStore = [...MOCK_HISTORY];
 
 export const vehicleService = {
-  /**
-   * POST /api/vehicles/valuate
-   * Submit vehicle details for AI valuation.
-   * @param {{ make, model, year, mileage, condition, ... }} vehicleData
-   * @param {string} token
-   * Expected response: { id, estimatedValue, confidence, breakdown, ... }
-   */
-  getValuation: (vehicleData, token) =>
-    apiClient(
+  getValuation: async (vehicleData, token) => {
+    if (USE_MOCK) {
+      await delay(1200); // slightly longer — simulates AI processing
+      const newValuation = {
+        id: `val_${Date.now()}`,
+        ...vehicleData,
+        estimatedValue: Math.floor(800000 + Math.random() * 3500000),
+        confidence: Math.floor(70 + Math.random() * 28),
+        createdAt: new Date().toISOString(),
+        priceRange: {
+          low:  Math.floor(vehicleData.mileage > 60000 ? 700000 : 900000),
+          high: Math.floor(vehicleData.mileage > 60000 ? 2000000 : 4000000),
+        },
+        breakdown: [
+          { factor: "Base market value",   impact: 2500000,  description: `Average market price for ${vehicleData.year} ${vehicleData.make} ${vehicleData.model}` },
+          { factor: "Mileage adjustment",  impact: vehicleData.mileage > 50000 ? -150000 : 80000, description: `${Number(vehicleData.mileage).toLocaleString()} km` },
+          { factor: "Condition",           impact: vehicleData.condition === "Excellent" ? 120000 : vehicleData.condition === "Good" ? 40000 : -80000, description: `${vehicleData.condition} condition` },
+          { factor: "Market depreciation", impact: -100000,  description: "Annual depreciation applied" },
+        ],
+      };
+      mockStore = [newValuation, ...mockStore];
+      return newValuation;
+    }
+    return apiClient(
       "/api/vehicles/valuate",
       { method: "POST", body: JSON.stringify(vehicleData) },
       token
-    ),
+    );
+  },
 
-  /**
-   * GET /api/vehicles/history
-   * Fetch the authenticated user's past valuations.
-   * @param {string} token
-   * Expected response: [{ id, make, model, year, estimatedValue, createdAt }, ...]
-   */
-  getHistory: (token) =>
-    apiClient("/api/vehicles/history", { method: "GET" }, token),
+  getHistory: async (token) => {
+    if (USE_MOCK) {
+      await delay();
+      return mockStore;
+    }
+    return apiClient("/api/vehicles/history", { method: "GET" }, token);
+  },
 
-  /**
-   * GET /api/vehicles/:id
-   * Fetch a single valuation by ID.
-   * @param {string} id
-   * @param {string} token
-   */
-  getValuationById: (id, token) =>
-    apiClient(`/api/vehicles/${id}`, { method: "GET" }, token),
+  getValuationById: async (id, token) => {
+    if (USE_MOCK) {
+      await delay(400);
+      const item = mockStore.find((v) => v.id === id);
+      if (!item) throw new Error("Valuation not found.");
+      return item;
+    }
+    return apiClient(`/api/vehicles/${id}`, { method: "GET" }, token);
+  },
 
-  /**
-   * DELETE /api/vehicles/:id
-   * Delete a valuation from history.
-   * @param {string} id
-   * @param {string} token
-   */
-  deleteValuation: (id, token) =>
-    apiClient(`/api/vehicles/${id}`, { method: "DELETE" }, token),
+  deleteValuation: async (id, token) => {
+    if (USE_MOCK) {
+      await delay(400);
+      mockStore = mockStore.filter((v) => v.id !== id);
+      return { message: "Deleted successfully." };
+    }
+    return apiClient(`/api/vehicles/${id}`, { method: "DELETE" }, token);
+  },
 };

@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../Context/AuthContext";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import { vehicleService } from "../api/vehicleService";
 
 function formatCurrency(value) {
   if (!value && value !== 0) return "—";
@@ -77,11 +74,8 @@ function HistoryCard({ item, onDelete }) {
     if (!window.confirm("Remove this valuation from your history?")) return;
     setDeleting(true);
     try {
-      const res = await fetch(`${API_URL}/api/vehicles/${item.id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) onDelete(item.id);
+      await vehicleService.deleteValuation(item.id, token);
+      onDelete(item.id);
     } catch {
       // silently fail — parent will still show the item
     } finally {
@@ -152,15 +146,11 @@ function ValuationHistory() {
   const [sortBy, setSortBy]     = useState("newest");
 
   useEffect(() => {
-    const fetchHistory = async () => {
+    const load = async () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_URL}/api/vehicles/history`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to load history.");
+        const data = await vehicleService.getHistory(token);
         setHistory(data);
       } catch (err) {
         setError(err.message);
@@ -168,8 +158,7 @@ function ValuationHistory() {
         setLoading(false);
       }
     };
-
-    if (token) fetchHistory();
+    if (token) load();
   }, [token]);
 
   const handleDelete = (id) => {

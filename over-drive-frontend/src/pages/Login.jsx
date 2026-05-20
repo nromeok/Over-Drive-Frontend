@@ -2,17 +2,24 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
+function humaniseError(msg) {
+  if (!msg) return "Something went wrong. Please try again.";
+  if (msg === "Failed to fetch" || msg.includes("NetworkError") || msg.includes("fetch"))
+    return "Cannot reach the server. Make sure the backend is running.";
+  if (msg.includes("401") || msg.toLowerCase().includes("invalid credentials"))
+    return "Incorrect email or password.";
+  return msg;
+}
+
 function Login() {
   const { login, loading, error, isAuthenticated, clearAuthError } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate  = useNavigate();
+  const location  = useLocation();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  // Where to send the user after login — default to dashboard
   const from = location.state?.from?.pathname || "/dashboard";
 
-  // Already logged in? Skip this page
   useEffect(() => {
     if (isAuthenticated) navigate(from, { replace: true });
   }, [isAuthenticated, navigate, from]);
@@ -44,19 +51,27 @@ function Login() {
       <div className="w-full max-w-md bg-white/40 backdrop-blur-lg shadow-xl rounded-3xl p-8 border border-white/30">
 
         <h2 className="text-3xl font-bold text-black mb-2">Welcome Back</h2>
-        <p className="text-gray-800 mb-8">Sign in to access your dashboard</p>
+        <p className="text-gray-800 mb-6">Sign in to access your dashboard</p>
 
         {/* Error banner */}
         {error && (
-          <div className="mb-5 p-3 bg-red-100 border border-red-300 text-red-700 rounded-xl text-sm">
-            {error}
+          <div className="mb-5 flex items-start gap-2 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
+            <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="flex-1">{humaniseError(error)}</span>
+            <button onClick={clearAuthError} className="text-red-400 hover:text-red-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
           {/* Email */}
           <div className="mb-5">
-            <label className="block mb-2 font-medium">Email Address</label>
+            <label className="block mb-2 font-medium text-sm">Email Address</label>
             <input
               type="email"
               name="email"
@@ -70,7 +85,7 @@ function Login() {
 
           {/* Password */}
           <div className="mb-5">
-            <label className="block mb-2 font-medium">Password</label>
+            <label className="block mb-2 font-medium text-sm">Password</label>
             <input
               type="password"
               name="password"
@@ -110,29 +125,14 @@ function Login() {
           </button>
         </form>
 
-        <div className="border-t border-gray-300 my-8" />
+        <div className="border-t border-gray-300 my-6" />
 
-        <p className="text-center text-gray-800">
+        <p className="text-center text-gray-800 text-sm">
           Don't have an account?{" "}
           <Link to="/register" className="text-cyan-400 font-semibold hover:text-cyan-500">
             Sign up for Free
           </Link>
         </p>
-
-        <div className="flex items-center gap-4 my-6">
-          <div className="flex-1 h-px bg-gray-300" />
-          <span className="text-sm text-gray-600">Or continue with</span>
-          <div className="flex-1 h-px bg-gray-300" />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <button className="border border-gray-300 rounded-2xl py-3 bg-white/50 hover:bg-white transition text-sm">
-            Google
-          </button>
-          <button className="border border-gray-300 rounded-2xl py-3 bg-white/50 hover:bg-white transition">
-            Facebook
-          </button>
-        </div>
       </div>
     </div>
   );
