@@ -9,101 +9,99 @@ import {
 } from "./AuthActions";
 import { authService } from "../api/authService";
 
-// ─── Storage helpers ──────────────────────────────────────────────────────────
-
 const TOKEN_KEY = "overdrive_token";
 const USER_KEY  = "overdrive_user";
 
-const getStoredToken = () => localStorage.getItem(TOKEN_KEY) || null;
-const getStoredUser  = () => {
+// ─── Helpers ───────────────────────────────
+
+const getStoredToken = () => localStorage.getItem(TOKEN_KEY);
+const getStoredUser = () => {
   try {
-    const u = localStorage.getItem(USER_KEY);
-    return u ? JSON.parse(u) : null;
+    return JSON.parse(localStorage.getItem(USER_KEY));
   } catch {
     return null;
   }
 };
 
-// ─── Initial state (rehydrated from localStorage) ────────────────────────────
-
-const storedToken = getStoredToken();
-const storedUser  = getStoredUser();
+// ─── Initial state ─────────────────────────
 
 const initialState = {
-  user: storedUser,
-  token: storedToken,
-  isAuthenticated: !!(storedUser && storedToken),
+  user: getStoredUser(),
+  token: getStoredToken(),
+  isAuthenticated: !!(getStoredUser() && getStoredToken()),
   loading: false,
   error: null,
 };
 
-// ─── Context ──────────────────────────────────────────────────────────────────
+// ─── Context ────────────────────────────────
 
 export const AuthContext = createContext(initialState);
 
-// ─── Provider ─────────────────────────────────────────────────────────────────
+// ─── Provider ───────────────────────────────
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
+  // LOGIN
   const login = useCallback(async (email, password) => {
-  dispatch(loginStart());
+    dispatch(loginStart());
 
-  try {
-    const data = await authService.login(email, password);
+    try {
+      const data = await authService.login(email, password);
 
-    console.log("LOGIN RESPONSE:", data);
+      const token = data?.access_token;
+      const user = data?.user;
 
-    const token = data?.access_token;
-    const user = data?.user;
+      if (!token) {
+        throw new Error("Login failed: token missing from server response");
+      }
 
-    if (!token) {
-      throw new Error("Login failed: token missing from server response");
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+
+      dispatch(loginSuccess({ user, token }));
+
+      return { success: true };
+    } catch (err) {
+      dispatch(loginFailure(err.message));
+      return { success: false, error: err.message };
     }
+  }, []);
 
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
-
-    dispatch(loginSuccess(user));
-
-    return { success: true };
-  } catch (err) {
-    dispatch(loginFailure(err.message));
-
-    return { success: false, error: err.message };
-  }
-}, []);
+  // REGISTER
   const register = useCallback(async (name, email, password) => {
-  dispatch(registerStart());
+    dispatch(registerStart());
 
-  try {
-    const data = await authService.register(name, email, password);
+    try {
+      const data = await authService.register(name, email, password);
 
-    const token = data?.access_token;
-    const user = data?.user;
+      const token = data?.access_token;
+      const user = data?.user;
 
-    if (!token) {
-      throw new Error("Register failed: token missing from server response");
+      if (!token) {
+        throw new Error("Register failed: token missing from server response");
+      }
+
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+
+      dispatch(registerSuccess({ user, token }));
+
+      return { success: true };
+    } catch (err) {
+      dispatch(registerFailure(err.message));
+      return { success: false, error: err.message };
     }
+  }, []);
 
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
-
-    dispatch(registerSuccess(user));
-    return { success: true };
-  } catch (err) {
-    dispatch(registerFailure(err.message));
-    return { success: false, error: err.message };
-  }
-}, []);
-
-  // Used by OAuthCallback — stores token + user coming back from Google/Facebook
+  // OAuth login
   const loginWithToken = useCallback((token, user) => {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
-    dispatch(loginSuccess(user));
+    dispatch(loginSuccess({ user, token }));
   }, []);
 
+  // LOGOUT
   const logoutUser = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
@@ -142,10 +140,10 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ─── Custom hook ──────────────────────────────────────────────────────────────
+// ─── Hook ────────────────────────────────
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
