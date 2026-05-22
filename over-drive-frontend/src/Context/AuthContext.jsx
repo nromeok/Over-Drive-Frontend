@@ -15,6 +15,7 @@ const USER_KEY  = "overdrive_user";
 // ─── Helpers ───────────────────────────────
 
 const getStoredToken = () => localStorage.getItem(TOKEN_KEY);
+
 const getStoredUser = () => {
   try {
     return JSON.parse(localStorage.getItem(USER_KEY));
@@ -49,7 +50,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authService.login(email, password);
 
-      const token = data?.access_token;
+      // ✅ FIXED: use token (NOT access_token)
+      const token = data?.token;
       const user = data?.user;
 
       if (!token) {
@@ -75,7 +77,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authService.register(name, email, password);
 
-      const token = data?.access_token;
+      // ✅ FIXED: use token
+      const token = data?.token;
       const user = data?.user;
 
       if (!token) {

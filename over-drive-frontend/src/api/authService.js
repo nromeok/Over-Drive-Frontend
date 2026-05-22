@@ -1,40 +1,62 @@
 import { apiClient } from "./client";
 
+/**
+ * Normalize all auth responses into a single predictable shape
+ */
 const normalize = (res) => {
-  const data = res?.data ?? res;
+  // apiClient already returns parsed JSON
+  const data = res;
 
   return {
     user: data?.user ?? null,
-    access_token: data?.access_token ?? null,
+    token: data?.token ?? null,
   };
 };
 
 export const authService = {
+  /**
+   * LOGIN
+   */
   login: async (email, password) => {
     const res = await apiClient("/api/auth/login", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ email, password }),
     });
 
     return normalize(res);
   },
 
-  register: async (name, email, password) => {
+  /**
+   * REGISTER
+   */
+  register: async (name, email, password, phone = null) => {
     const res = await apiClient("/api/auth/register", {
       method: "POST",
-      body: JSON.stringify({ name, email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        phone,
+      }),
     });
 
     return normalize(res);
   },
 
+  /**
+   * GET CURRENT USER
+   */
   getMe: async () => {
     const res = await apiClient("/api/auth/me", {
       method: "GET",
     });
 
-    const data = res?.data ?? res;
-
-    return data?.user ?? null;
+    return res?.user ?? null;
   },
 };

@@ -4,9 +4,8 @@ const BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://over-drive-backend.onrender.com";
 
-/**
- * Generic API client for all requests
- */
+console.log("API BASE URL:", BASE_URL);
+
 export async function apiClient(endpoint, options = {}) {
   const isFormData = options.body instanceof FormData;
 
@@ -20,12 +19,12 @@ export async function apiClient(endpoint, options = {}) {
       ...(options.headers || {}),
     };
 
-    // Attach JWT token if available
+    // Attach JWT if exists
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
 
-    // Only set JSON header if NOT FormData
+    // Only JSON header if not FormData
     if (!isFormData) {
       headers["Content-Type"] = "application/json";
     }
@@ -38,33 +37,21 @@ export async function apiClient(endpoint, options = {}) {
 
     const contentType = response.headers.get("content-type");
 
-    let data;
+    let data = null;
 
-    // Parse JSON safely
     if (contentType?.includes("application/json")) {
       data = await response.json().catch(() => null);
     } else {
       data = await response.text().catch(() => null);
     }
 
-    // Handle API errors
     if (!response.ok) {
-      const message =
-        data?.message ||
-        data?.error ||
-        `Request failed with status ${response.status}`;
-
-      throw new Error(message);
+      throw new Error(
+        data?.message || data?.error || `Request failed (${response.status})`
+      );
     }
 
     return data;
-  } catch (error) {
-    // Handle abort separately
-    if (error.name === "AbortError") {
-      throw new Error("Request timeout. Please try again.");
-    }
-
-    throw error;
   } finally {
     clearTimeout(timeout);
   }
