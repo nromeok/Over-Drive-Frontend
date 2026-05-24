@@ -73,7 +73,7 @@ export default function ValuationResult() {
 
       {/* Market Value */}
       <div style={{ background: '#1e2937', padding: '32px', borderRadius: '16px', marginBottom: '30px' }}>
-        <h3>📊 Market Value Estimate (Kenya 2026)</h3>
+        <h3>📊 Market Value Estimate [Coming Soon - Kenya 2026]</h3>
         <div style={{ display: 'flex', gap: '40px', marginTop: '20px', flexWrap: 'wrap' }}>
           <div>
             <p style={{ color: '#94a3b8' }}>Recommended Selling Price</p>
@@ -90,7 +90,7 @@ export default function ValuationResult() {
 
       {/* AI Summary */}
       <div style={{ background: '#1e2937', padding: '32px', borderRadius: '16px', marginBottom: '30px' }}>
-        <h3>🤖 AI Summary & Reasoning</h3>
+        <h3> AI Summary & Reasoning</h3>
         <div style={{ lineHeight: '1.8', color: '#e2e8f0', whiteSpace: 'pre-line' }}>
           {summary}
         </div>
@@ -102,7 +102,7 @@ export default function ValuationResult() {
         {/* Positive Observations */}
         {positives.length > 0 && (
           <div style={{ background: '#1e2937', padding: '24px', borderRadius: '16px' }}>
-            <h3 style={{ color: '#22c55e' }}>✅ Positive Observations</h3>
+            <h3 style={{ color: '#22c55e' }}> Positive Observations</h3>
             <ul style={{ marginTop: '16px', paddingLeft: '20px' }}>
               {positives.map((item, i) => (
                 <li key={i} style={{ marginBottom: '12px', color: '#e2e8f0' }}>{item}</li>

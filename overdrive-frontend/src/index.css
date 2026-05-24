@@ -1,4 +1,6 @@
-/* src/index.css */
+/* =========================
+   BASE RESET + THEME
+========================= */
 * {
   margin: 0;
   padding: 0;
@@ -9,30 +11,113 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #0f172a;
   color: #e2e8f0;
+  line-height: 1.5;
 }
 
-.gradient-bg {
-  background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+/* =========================
+   LAYOUT SYSTEM
+========================= */
+.app-container {
+  display: flex;
+  min-height: 100vh;
 }
 
-/* Card Style */
+/* =========================
+   SIDEBAR (DESKTOP DEFAULT)
+========================= */
+.sidebar {
+  width: 260px;
+  background: #0f172a;
+  border-right: 1px solid #334155;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 50;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.sidebar-header {
+  padding: 20px;
+  font-weight: 700;
+  color: #3b82f6;
+  border-bottom: 1px solid #334155;
+}
+
+.sidebar-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* =========================
+   MAIN CONTENT AREA
+========================= */
+.main {
+  flex: 1;
+  margin-left: 260px;
+  padding: 24px;
+  transition: margin-left 0.3s ease;
+}
+
+.main.full {
+  margin-left: 0;
+}
+
+/* =========================
+   TOP NAV (MOBILE)
+========================= */
+.topbar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #0f172a;
+  border-bottom: 1px solid #334155;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* =========================
+   CARDS
+========================= */
 .card {
   background: #1e2937;
   border-radius: 16px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  padding: 20px;
   border: 1px solid #334155;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  margin-bottom: 16px;
 }
 
-/* Button Styles */
+/* =========================
+   BUTTONS
+========================= */
 .btn-primary {
   background: #3b82f6;
   color: white;
-  padding: 12px 24px;
+  padding: 12px 16px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: 0.2s;
 }
 
 .btn-primary:hover {
@@ -42,34 +127,33 @@ body {
 
 .btn-secondary {
   background: transparent;
-  color: #94a3b8;
   border: 1px solid #475569;
-  padding: 12px 24px;
-  border-radius: 12px;
+  color: #cbd5e1;
+  padding: 12px 16px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
-.btn-secondary:hover {
-  background: #334155;
-  color: white;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 260px;
+/* =========================
+   FORMS
+========================= */
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #334155;
   background: #0f172a;
-  border-right: 1px solid #334155;
-  height: 100vh;
-  position: fixed;
-  display: flex;
-  flex-direction: column;
+  color: white;
+  margin-bottom: 12px;
 }
 
-/* Progress Steps */
+/* =========================
+   STEP INDICATORS
+========================= */
 .step {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 10px;
   color: #64748b;
 }
 
@@ -78,8 +162,8 @@ body {
 }
 
 .step-circle {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -93,4 +177,56 @@ body {
   border-color: #3b82f6;
   background: #1e40af;
   color: white;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .main {
+    padding: 18px;
+  }
+
+  .sidebar {
+    width: 220px;
+  }
+
+  .main {
+    margin-left: 220px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .topbar {
+    display: flex;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    width: 260px;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
 }
