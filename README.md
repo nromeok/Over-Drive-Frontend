@@ -1,86 +1,149 @@
-# Over Drive Frontend
+# OverDrive Frontend
 
-Over Drive Frontend is the user interface for the AI-powered second-hand vehicle analysis platform.
+OverDrive Frontend is the client-side application for the AI-powered vehicle valuation and inspection platform built for the Kenyan automotive market.
 
-The application allows users to upload vehicle images and receive AI-generated vehicle analysis, estimated market prices, and detailed vehicle reports. The frontend focuses on creating a modern, user-friendly, and responsive experience for second-hand vehicle evaluation and management.
+The platform enables users to upload vehicle images and receive intelligent AI-generated analysis including:
 
----
+* Vehicle condition assessment
+* Estimated market value
+* Damage detection
+* Vehicle insights and recommendations
 
-## How It Works
-
-### 1. User Authentication
-- Users register and log in securely using JWT authentication.
-
-### 2. Vehicle Upload
-- Users upload vehicle images through the image upload interface.
-
-### 3. AI Vehicle Analysis
-- The system sends uploaded images to the backend for AI-based analysis.
-
-### 4. Vehicle Valuation
-- Users receive:
-  - Estimated market value
-  - Vehicle specifications
-  - Vehicle condition analysis
-
-### 5. Dashboard Management
-- Users can manage:
-  - Valuation history
-  - Profile information
-  - Vehicle reports
+The frontend focuses on delivering a fast, responsive, and modern user experience for vehicle valuation, inspection, and management.
 
 ---
 
-## Users
+# Features
 
-- Vehicle owners looking to evaluate and sell their vehicles
-- Buyers seeking transparent vehicle information
-- Administrators managing system operations
-
----
-
-## Benefits of the Project
-
-- Simplifies vehicle valuation workflows
-- Reduces dependency on manual inspections
-- Improves transparency in vehicle transactions
-- Provides AI-powered market price estimation
-- Creates professional vehicle analysis reports
+* Secure JWT Authentication
+* AI-powered vehicle image analysis
+* Vehicle market price estimation
+* Vehicle condition reporting
+* Dashboard and valuation history
+* Responsive modern UI
+* Protected authenticated routes
+* Global state management using Context API
 
 ---
 
-## Goals of the Project
+# How the Platform Works
 
-- Build a scalable React frontend application
-- Create an intuitive vehicle analysis interface
-- Integrate AI-powered vehicle valuation workflows
-- Demonstrate modern frontend architecture using React and Tailwind CSS
+## 1. User Authentication
 
----
+Users can:
 
-## Technologies Used for Frontend
+* Register an account
+* Log in securely
+* Access protected dashboard features
 
-- React.js
-- Tailwind CSS
-- JavaScript
-- React Router
-- Context API
-- Vite
+Authentication is handled using JWT tokens.
 
 ---
 
-## Setup Instructions
+## 2. Vehicle Upload
 
-### 1 Clone the Repository
+Users upload:
+
+* Exterior vehicle photos
+* Interior photos
+* Damage or inspection images
+
+The frontend sends uploaded images to the backend API for processing.
+
+---
+
+## 3. AI Vehicle Analysis
+
+The backend AI services analyze uploaded images to determine:
+
+* Vehicle condition
+* Visible damage
+* Wear and tear
+* Modifications
+* Vehicle details and specifications
+
+---
+
+## 4. Vehicle Valuation
+
+After analysis, the system generates:
+
+* Estimated Kenyan market price
+* Vehicle inspection summaries
+* AI-generated insights
+* Repair and resale recommendations
+
+---
+
+## 5. Dashboard Management
+
+Users can manage:
+
+* Previous valuations
+* Uploaded vehicles
+* Vehicle reports
+* Profile settings
+* Account information
+
+---
+
+# Target Users
+
+* Vehicle owners
+* Used-car buyers
+* Car dealerships
+* Vehicle inspectors
+* Automotive marketplaces
+* Administrators managing the platform
+
+---
+
+# Project Goals
+
+* Build a scalable React frontend application
+* Create a professional AI-powered valuation experience
+* Improve transparency in used vehicle transactions
+* Reduce dependency on manual inspections
+* Provide intelligent market-based vehicle pricing
+* Deliver a responsive and modern UI
+
+---
+
+# Technologies Used
+
+## Frontend
+
+* React.js
+* JavaScript
+* Vite
+* React Router DOM
+* Context API
+* CSS3
+
+## Backend Integration
+
+The frontend connects to:
+
+* Flask backend APIs
+* PostgreSQL database services
+* AI image analysis services
+* Cloudinary image storage
+
+---
+
+# Installation & Setup
+
+## 1. Clone the Repository
 
 ```bash
 git clone git@github.com:maryonyango-prog/Over-Drive-Frontend.git
-cd over-drive-frontend
+
+cd Over-Drive-Frontend
 ```
 
 ---
 
-### 2 Install Dependencies
+## 2. Install Dependencies
 
 ```bash
 npm install
@@ -88,15 +151,7 @@ npm install
 
 ---
 
-### 3 Install Tailwind
-
-```bash
-npm install tailwindcss @tailwindcss/vite
-```
-
----
-
-### 4 Run the Development Server
+## 3. Start the Development Server
 
 ```bash
 npm run dev
@@ -104,109 +159,34 @@ npm run dev
 
 ---
 
-## For Users
+# Environment Variables
 
-- Register or log in to the application
-- Upload vehicle images
-- View vehicle valuation reports
-- Access valuation history and dashboard features
+Create a `.env` file in the root directory:
 
----
+```env
+VITE_API_BASE_URL=http://localhost:5000
+```
 
-## For Administrators
-
-- Access the admin dashboard
-- Manage users and vehicle records
-- Monitor valuation activities
-- Manage backend-connected services
-
-- (Administrators will have access to the connected PostgreSQL database and backend services)
+Update the URL depending on your backend configuration.
 
 ---
 
-## useAuth
-
-**Purpose:**  
-Manages authentication state across the application.
-
-**Responsibilities:**
-- Tracks authenticated users
-- Handles login and logout
-- Protects restricted routes
-- Stores authentication tokens
-
----
-
-## useVehicles
-
-**Purpose:**  
-Manages vehicle-related operations and state.
-
-**Responsibilities:**
-- Fetches vehicle data
-- Stores valuation results
-- Handles vehicle uploads
-- Manages vehicle history
-
----
-
-## AuthContext
-
-**Purpose:**  
-Provides global authentication state management.
-
-**Responsibilities:**
-- Stores current user data
-- Handles authentication actions
-- Shares authentication state across components
-
----
-
-## VehicleContext
-
-**Purpose:**  
-Provides global vehicle data management.
-
-**Responsibilities:**
-- Stores vehicle valuation data
-- Handles vehicle actions
-- Shares vehicle state globally
-
----
-
-## ProtectedRoute
-
-**Purpose:**  
-Protects authenticated application routes.
-
-**Responsibilities:**
-- Restricts unauthorized access
-- Redirects unauthenticated users
-- Validates authentication state
-
----
-
-## Component Tree
+# Application Structure
 
 ```bash
 src/
-├── api
+├── api/
 │   ├── authService.js
 │   ├── client.js
 │   └── vehicleService.js
 │
-├── components
-│   ├── errors
-│   │   ├── ErrorBoundary.jsx
-│   │   └── ErrorMessage.jsx
-│   │
-│   ├── navigation
-│   │   ├── Navbar.jsx
+├── components/
+│   ├── navigation/
 │   │   └── Sidebar.jsx
 │   │
 │   └── ProtectedRoute.jsx
 │
-├── Context
+├── Context/
 │   ├── AuthActions.js
 │   ├── AuthContext.jsx
 │   ├── AuthReducer.js
@@ -216,15 +196,15 @@ src/
 │   ├── VehicleContext.jsx
 │   └── VehicleReducer.js
 │
-├── hooks
+├── hooks/
 │   ├── useAuth.js
 │   └── useVehicles.js
 │
-├── layouts
+├── layouts/
 │   ├── DashboardLayout.jsx
 │   └── MainLayout.jsx
 │
-├── pages
+├── pages/
 │   ├── Dashboard.jsx
 │   ├── Home.jsx
 │   ├── ImageUpload.jsx
@@ -240,7 +220,7 @@ src/
 │   ├── ValuationHistory.jsx
 │   └── ValuationResult.jsx
 │
-├── router
+├── router/
 │   └── AppRouter.jsx
 │
 ├── index.css
@@ -249,18 +229,121 @@ src/
 
 ---
 
-## Author
+# Core Hooks & Contexts
+
+## `useAuth`
+
+Handles authentication state and actions across the application.
+
+### Responsibilities
+
+* Login & logout
+* Authentication state tracking
+* Route protection
+* Token management
+
+---
+
+## `useVehicles`
+
+Handles vehicle-related state and operations.
+
+### Responsibilities
+
+* Vehicle uploads
+* Fetching valuation results
+* Managing valuation history
+* Storing vehicle analysis data
+
+---
+
+## `AuthContext`
+
+Provides global authentication state.
+
+### Responsibilities
+
+* Current user management
+* Authentication actions
+* Shared auth state across components
+
+---
+
+## `VehicleContext`
+
+Provides global vehicle-related state management.
+
+### Responsibilities
+
+* Vehicle valuation storage
+* Vehicle state updates
+* Shared vehicle data access
+
+---
+
+## `ProtectedRoute`
+
+Protects routes requiring authentication.
+
+### Responsibilities
+
+* Restrict unauthorized access
+* Redirect unauthenticated users
+* Validate user sessions
+
+---
+
+# User Features
+
+Users can:
+
+* Register and log in
+* Upload vehicle images
+* Receive AI vehicle analysis
+* View valuation reports
+* Access valuation history
+* Manage their profile and settings
+
+---
+
+# Administrator Features
+
+Administrators can:
+
+* Access admin dashboards
+* Monitor platform activity
+* Manage users and vehicle records
+* Access backend-connected services
+* Supervise valuation operations
+
+---
+
+# Future Improvements
+
+Planned features include:
+
+* Live Kenyan market integrations
+* AI damage severity scoring
+* Vehicle fraud detection
+* PDF vehicle inspection reports
+* Advanced analytics dashboards
+* Real-time valuation tracking
+* Mobile application support
+
+---
+
+# Contributors
 
 This project was developed by:
 
-1. Mary Onyango  
-2. Nelson Romeo  
-3. Noah Kemboi  
-4. Jelagat Asumpta  
+1. Mary Onyango
+2. Nelson Romeo
+3. Noah Kemboi
+4. Jelagat Asumpta
 5. Angella Musamali
 
 ---
 
 # License
 
-This project is currently licensed under the MIT License.
+This project is licensed under the MIT License.
