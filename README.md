@@ -1,334 +1,141 @@
-# OverDrive Frontend
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=OverDrive%20Frontend%&descAlign=53&descAlignY=53&animation=fadeIn&fontSize=30&textBg=false"/>
+</p>
 
-OverDrive Frontend is the client-side application for the AI-powered vehicle valuation and inspection platform built for the Kenyan automotive market.
+<h3 align="center">Over-Drive — AI Vehicle Valuation Platform (Frontend)</h3>
 
-The platform enables users to upload vehicle images and receive intelligent AI-generated analysis including:
-
-* Vehicle condition assessment
-* Estimated market value
-* Damage detection
-* Vehicle insights and recommendations
-
-The frontend focuses on delivering a fast, responsive, and modern user experience for vehicle valuation, inspection, and management.
+<p align="center">
+  Modern, responsive React web application for intelligent used vehicle valuation in Kenya.
+</p>
 
 ---
 
-# Features
+## Features
 
-* Secure JWT Authentication
-* AI-powered vehicle image analysis
-* Vehicle market price estimation
-* Vehicle condition reporting
-* Dashboard and valuation history
-* Responsive modern UI
-* Protected authenticated routes
-* Global state management using Context API
-
----
-
-# How the Platform Works
-
-## 1. User Authentication
-
-Users can:
-
-* Register an account
-* Log in securely
-* Access protected dashboard features
-
-Authentication is handled using JWT tokens.
+- **AI-Powered Vehicle Analysis** — Upload photos and get instant AI condition assessment
+- **Real Kenyan Market Valuation** — Accurate pricing based on local market data
+- **Detailed Reports** — Condition score, risk level, comparables, and buyer recommendations
+- **Image Analysis** — Per-image breakdown with positives, issues & repair suggestions
+- **Beautiful UI/UX** — Dark modern design with smooth animations
+- **History & Saved Valuations** — Track all previous valuations
+- **Mobile Responsive** — Works perfectly on phones and tablets
 
 ---
 
-## 2. Vehicle Upload
+## Tech Stack
 
-Users upload:
-
-* Exterior vehicle photos
-* Interior photos
-* Damage or inspection images
-
-The frontend sends uploaded images to the backend API for processing.
-
----
-
-## 3. AI Vehicle Analysis
-
-The backend AI services analyze uploaded images to determine:
-
-* Vehicle condition
-* Visible damage
-* Wear and tear
-* Modifications
-* Vehicle details and specifications
+- **React 18** + **Vite**
+- **React Router v6**
+- **Lucide React** (Icons)
+- **Tailwind CSS** (with custom CSS)
+- **Context API** (Toast, Auth, etc.)
+- **Axios** (API calls)
+- **React Hot Toast** / Custom Toast System
 
 ---
 
-## 4. Vehicle Valuation
-
-After analysis, the system generates:
-
-* Estimated Kenyan market price
-* Vehicle inspection summaries
-* AI-generated insights
-* Repair and resale recommendations
-
----
-
-## 5. Dashboard Management
-
-Users can manage:
-
-* Previous valuations
-* Uploaded vehicles
-* Vehicle reports
-* Profile settings
-* Account information
-
----
-
-# Target Users
-
-* Vehicle owners
-* Used-car buyers
-* Car dealerships
-* Vehicle inspectors
-* Automotive marketplaces
-* Administrators managing the platform
-
----
-
-# Project Goals
-
-* Build a scalable React frontend application
-* Create a professional AI-powered valuation experience
-* Improve transparency in used vehicle transactions
-* Reduce dependency on manual inspections
-* Provide intelligent market-based vehicle pricing
-* Deliver a responsive and modern UI
-
----
-
-# Technologies Used
-
-## Frontend
-
-* React.js
-* JavaScript
-* Vite
-* React Router DOM
-* Context API
-* CSS3
-
-## Backend Integration
-
-The frontend connects to:
-
-* Flask backend APIs
-* PostgreSQL database services
-* AI image analysis services
-* Cloudinary image storage
-
----
-
-# Installation & Setup
-
-## 1. Clone the Repository
+## Project Structure
 
 ```bash
-git clone git@github.com:maryonyango-prog/Over-Drive-Frontend.git
-
-cd Over-Drive-Frontend
+over-drive-frontend/
+├── src/
+│   ├── components/          # Reusable components
+│   ├── pages/               # Main pages (History, ValuationResult, etc.)
+│   ├── Context/             # React Contexts (Toast, Auth)
+│   ├── assets/
+│   ├── App.jsx
+│   └── main.jsx
+├── public/
+├── .env
+├── vite.config.js
+└── package.json
 ```
 
 ---
 
-## 2. Install Dependencies
+## Setup Instructions
 
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/over-drive-frontend.git
+cd over-drive-frontend
+```
+
+### 2. Install Dependencies
 ```bash
 npm install
+# or
+yarn install
 ```
 
----
+### 3. Environment Variables (`.env`)
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+# VITE_API_BASE_URL=https://your-backend.onrender.com/api   # Production
+```
 
-## 3. Start the Development Server
-
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
 
----
-
-# Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-VITE_API_BASE_URL=http://localhost:5000
-```
-
-Update the URL depending on your backend configuration.
+App runs at: `http://localhost:5173`
 
 ---
 
-# Application Structure
+## Key Pages
 
+- `/` — Landing / Home
+- `/login` — User Login
+- `/register` — User Registration
+- `/dashboard` — Main Dashboard
+- `/history` — Valuation History
+- `/valuation/:id` or via state — **Valuation Result** (Detailed Report)
+- `/upload` — Vehicle Image Upload
+
+---
+
+## Main Features Implemented
+
+- Vehicle photo upload with preview
+- AI valuation result page with:
+  - Recommended price
+  - Condition score + Risk level
+  - Detailed image-by-image analysis
+  - Smart buyer recommendation
+  - Market comparables
+- Responsive design (Mobile-first)
+- Toast notifications
+- Clean state management
+
+---
+
+## Backend Connection
+
+The frontend connects to the **Over-Drive Backend** via REST API.
+
+Make sure your backend is running on the URL specified in `VITE_API_BASE_URL`.
+
+---
+
+## Deployment
+
+### Vercel / Netlify (Recommended)
+
+1. Push code to GitHub
+2. Import project in Vercel/Netlify
+3. Add Environment Variable:
+   - `VITE_API_BASE_URL` → your backend URL
+
+### Build Command
 ```bash
-src/
-├── api/
-│   ├── authService.js
-│   ├── client.js
-│   └── vehicleService.js
-│
-├── components/
-│   ├── navigation/
-│   │   └── Sidebar.jsx
-│   │
-│   └── ProtectedRoute.jsx
-│
-├── Context/
-│   ├── AuthActions.js
-│   ├── AuthContext.jsx
-│   ├── AuthReducer.js
-│   ├── ThemeContext.jsx
-│   ├── ToastContext.jsx
-│   ├── VehicleActions.js
-│   ├── VehicleContext.jsx
-│   └── VehicleReducer.js
-│
-├── hooks/
-│   ├── useAuth.js
-│   └── useVehicles.js
-│
-├── layouts/
-│   ├── DashboardLayout.jsx
-│   └── MainLayout.jsx
-│
-├── pages/
-│   ├── Dashboard.jsx
-│   ├── Home.jsx
-│   ├── ImageUpload.jsx
-│   ├── Login.jsx
-│   ├── NetworkError.jsx
-│   ├── NewValuation.jsx
-│   ├── NotFound.jsx
-│   ├── OAuthCallback.jsx
-│   ├── Profile.jsx
-│   ├── Register.jsx
-│   ├── Settings.jsx
-│   ├── Splash.jsx
-│   ├── ValuationHistory.jsx
-│   └── ValuationResult.jsx
-│
-├── router/
-│   └── AppRouter.jsx
-│
-├── index.css
-└── main.jsx
+npm run build
 ```
 
----
-
-# Core Hooks & Contexts
-
-## `useAuth`
-
-Handles authentication state and actions across the application.
-
-### Responsibilities
-
-* Login & logout
-* Authentication state tracking
-* Route protection
-* Token management
-
----
-
-## `useVehicles`
-
-Handles vehicle-related state and operations.
-
-### Responsibilities
-
-* Vehicle uploads
-* Fetching valuation results
-* Managing valuation history
-* Storing vehicle analysis data
-
----
-
-## `AuthContext`
-
-Provides global authentication state.
-
-### Responsibilities
-
-* Current user management
-* Authentication actions
-* Shared auth state across components
-
----
-
-## `VehicleContext`
-
-Provides global vehicle-related state management.
-
-### Responsibilities
-
-* Vehicle valuation storage
-* Vehicle state updates
-* Shared vehicle data access
-
----
-
-## `ProtectedRoute`
-
-Protects routes requiring authentication.
-
-### Responsibilities
-
-* Restrict unauthorized access
-* Redirect unauthenticated users
-* Validate user sessions
-
----
-
-# User Features
-
-Users can:
-
-* Register and log in
-* Upload vehicle images
-* Receive AI vehicle analysis
-* View valuation reports
-* Access valuation history
-* Manage their profile and settings
-
----
-
-# Administrator Features
-
-Administrators can:
-
-* Access admin dashboards
-* Monitor platform activity
-* Manage users and vehicle records
-* Access backend-connected services
-* Supervise valuation operations
-
----
-
-# Future Improvements
-
-Planned features include:
-
-* Live Kenyan market integrations
-* AI damage severity scoring
-* Vehicle fraud detection
-* PDF vehicle inspection reports
-* Advanced analytics dashboards
-* Real-time valuation tracking
-* Mobile application support
+### Preview Locally
+```bash
+npm run preview
+```
 
 ---
 
@@ -343,7 +150,3 @@ This project was developed by:
 5. Angella Musamali
 
 ---
-
-# License
-
-This project is licensed under the MIT License.
